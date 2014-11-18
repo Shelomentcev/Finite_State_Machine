@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include <set>
 #include <algorithm>
 #include <unordered_map>
@@ -75,7 +76,7 @@ public:
 		m_current_state(a_start_state),
 		m_accept_states(an_accept_states),
 		m_rulebook(a_rulebook)
-	{ }
+	{	}
 
 	void read_string(const string a_program){
 		for (char litera : a_program) {
@@ -101,6 +102,30 @@ public:
 	}
 };
 
+class DFADesign{
+private:
+	unsigned int m_current_state;
+	set<unsigned int> m_accept_states;
+	DFARulebook m_rulebook;
+public:
+	DFADesign(unsigned int a_current_state, set<unsigned int> an_accept_state, DFARulebook a_rulebook) :
+		m_current_state(a_current_state),
+		m_accept_states(an_accept_state),
+		m_rulebook(a_rulebook)
+	{}
+
+	unique_ptr<DFA> to_dfa() {
+		unique_ptr<DFA> temp(new DFA(m_current_state, m_accept_states, m_rulebook));
+		return temp;
+	}
+
+	bool accepts(string a_program) {
+		unique_ptr<DFA> temp = to_dfa();
+		temp->read_string(a_program);
+		return temp->accepting();
+	}
+};
+
 int main()
 {
 	DFARulebook rulebook({
@@ -109,14 +134,10 @@ int main()
 		FARule(3, 'a', 3), FARule(3, 'b', 3)
 	});
 
-	DFA dfa(1, {3}, rulebook);
-	
-	cout << dfa.accepting() << endl;
-
-	dfa.read_string("baaab");
-
-	cout << dfa.accepting() << endl;
-
+	DFADesign dfa(1, {3}, rulebook);
+	dfa.accepts("a");
+	dfa.accepts("baa");
+	dfa.accepts("baba");;
     system("pause");
     return 0;
 }
