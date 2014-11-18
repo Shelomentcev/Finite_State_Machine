@@ -1,5 +1,5 @@
 #include <iostream>
-#include <map>
+#include <set>
 #include <algorithm>
 #include <unordered_map>
 #include <string>
@@ -46,7 +46,7 @@ public:
         m_rules = a_rules;
 	}
 
-    const unsigned int next_state(const unsigned int a_state, const char a_litera) {
+    unsigned int next_state(const unsigned int a_state, const char a_litera) {
 		auto rule = rule_for(a_state, a_litera);
 #ifdef _DEBUG
 		rule->inspect();
@@ -65,6 +65,42 @@ private:
     }
 };
 
+class DFA {
+private:
+	unsigned int m_current_state;
+	set<unsigned int> m_accept_states;
+	DFARulebook m_rulebook;
+public:
+	DFA(unsigned int a_start_state, set<unsigned int> an_accept_states, DFARulebook a_rulebook) :
+		m_current_state(a_start_state),
+		m_accept_states(an_accept_states),
+		m_rulebook(a_rulebook)
+	{ }
+
+	void read_string(const string a_program){
+		for (char litera : a_program) {
+			read_character(litera);
+		}
+	}
+
+	void read_character(const char a_litera) {
+		m_current_state = m_rulebook.next_state(m_current_state, a_litera);
+	}
+
+	bool accepting() {
+		bool isAccepting = m_accept_states.find(m_current_state) != m_accept_states.end();
+#ifdef _DEBUG
+		cout << "DFA accepting state ";
+		if (isAccepting)
+			cout << "true";
+		else
+			cout << "false";
+		cout << endl;
+#endif
+		return isAccepting;
+	}
+};
+
 int main()
 {
 	DFARulebook rulebook({
@@ -73,7 +109,13 @@ int main()
 		FARule(3, 'a', 3), FARule(3, 'b', 3)
 	});
 
-	cout << rulebook.next_state(1, 'a') << endl;
+	DFA dfa(1, {3}, rulebook);
+	
+	cout << dfa.accepting() << endl;
+
+	dfa.read_string("baaab");
+
+	cout << dfa.accepting() << endl;
 
     system("pause");
     return 0;
