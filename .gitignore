@@ -1,2 +1,10 @@
 *.user
 *.pro
+*.sln
+*.sdf
+*.suo
+*.opensdf
+*.vcxproj
+*.vcxproj.filters
+/Debug
+/Release

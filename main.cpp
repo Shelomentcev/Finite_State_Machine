@@ -8,6 +8,7 @@
 using namespace std;
 
 class FARule {
+private:
     unsigned int m_state;
     unsigned int m_next_state;
     char m_litera;
@@ -24,15 +25,15 @@ public:
         return m_state == a_state && m_litera == a_litera;
     }
 
-    unsigned int state() {
+    const unsigned int state() {
         return m_state;
     }
 
-    char litera() {
+    const char litera() {
         return m_litera;
     }
 
-    unsigned int follow() {
+    const unsigned int follow() {
         return m_next_state;
     }
 
@@ -42,28 +43,35 @@ public:
 };
 
 class DFARulebook {
-    vector<FARule> m_rules;
+public:
     DFARulebook(vector<FARule> a_rules) {
         m_rules = a_rules;
-    }
-    unsigned int next_state(unsigned int a_state, char a_litera) {
+	}
 
+    const unsigned int next_state(const unsigned int a_state, const char a_litera) {
+		return rule_for(a_state, a_litera)->follow();
     }
+
 private:
-    FARule rule_for(unsigned int a_state, char a_litera) {
-        return find_if(m_rules.begin(), m_rules.end(), [a_state, a_litera](FARule a_it){
-            return a_it.applies_to(a_state, a_litera);
-        });
+	vector<FARule> m_rules;
+    const vector<FARule>::iterator rule_for(unsigned int a_state, char a_litera) {
+		auto result = find_if(m_rules.begin(), m_rules.end(), [&](FARule a_it)->bool{
+			return a_it.applies_to(a_state, a_litera);
+		});
+		
+		return result;
     }
-};
-
-class FSM {
-public:
-
 };
 
 int main()
 {
+	DFARulebook rulebook({
+		FARule(1, 'a', 2), FARule(1, 'b', 1),
+		FARule(2, 'a', 2), FARule(2, 'b', 3),
+		FARule(3, 'a', 3), FARule(3, 'b', 3)
+	});
+
+	cout << rulebook.next_state(1, 'a') << endl;
 
     system("pause");
     return 0;
