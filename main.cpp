@@ -13,9 +13,7 @@ private:
     unsigned int m_next_state;
     char m_litera;
 public:
-    FARule():
-    FARule(0, 0, 0)//Надо придумать что-то другое
-    {}
+    FARule():FARule(0, 0, 0) {}
     FARule(unsigned int a_state, char a_litera, unsigned int a_next_state):
     m_state(a_state),
     m_litera(a_litera),
@@ -38,7 +36,7 @@ public:
     }
 
     void inspect() {
-        cout << "FARule " << m_state << "--" << m_litera << "--> " << m_next_state;
+        cout << "FARule: " << m_state << "--" << m_litera << "-->" << m_next_state << endl;
     }
 };
 
@@ -49,8 +47,12 @@ public:
 	}
 
     const unsigned int next_state(const unsigned int a_state, const char a_litera) {
-		return rule_for(a_state, a_litera)->follow();
-    }
+		auto rule = rule_for(a_state, a_litera);
+#ifdef _DEBUG
+		rule->inspect();
+#endif
+		return rule->follow();
+	}
 
 private:
 	vector<FARule> m_rules;
