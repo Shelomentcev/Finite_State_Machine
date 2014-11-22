@@ -1,3 +1,5 @@
+#ifndef DFA_H_
+#define DFA_H_
 #include<set>
 #include<vector>
 #include<string>
@@ -122,3 +124,4 @@ public:
 		return temp->accepting();
 	}
 };
+#endif

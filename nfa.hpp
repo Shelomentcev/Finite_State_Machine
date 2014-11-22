@@ -1,3 +1,6 @@
+#ifndef NFA_H_ 
+#define NFA_H_
+
 #include<vector>
 #include<set>
 #include"dfa.hpp"
@@ -40,11 +43,25 @@ public:
 
 	bool accepting() {
 
-		std::set<unsigned int>::iterator intersect_start;
-		std::set<unsigned int>::iterator intersect_end = std::set_intersection(m_current_states.begin(), m_current_states.end(),
-			m_accept_states.begin(), m_accept_states.end(), intersect_start);
-
-		return intersect_start != intersect_end;
+		//std::set<unsigned int> intersect_result;
+		//std::set<unsigned int>::iterator it = std::set_intersection(m_current_states.begin(), m_current_states.end(),
+		//	m_accept_states.begin(), m_accept_states.end(), intersect_result.begin());
+		
+		//return !intersect_result.empty();
+		for (auto accept_state : m_accept_states) {
+			for (auto current_state : m_current_states) {
+				if (accept_state == current_state) {
+#ifdef _DEBUG
+					std::cout << "true" << std::endl;
+#endif
+					return true;
+				}
+			}
+		}
+#ifdef _DEBUG
+		std::cout << "false" << std::endl;
+#endif
+		return false;
 	}
 
 	void read_character(const char a_litera) {
@@ -85,3 +102,4 @@ private:
 	std::set<unsigned int> m_accept_states;
 	NFARulebook m_rulebook;
 };
+#endif
