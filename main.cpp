@@ -16,7 +16,7 @@ int main()
 	DFADesign dfa(1, {3}, dfa_rulebook);
 	dfa.accepts("a");
 	dfa.accepts("baa");
-	dfa.accepts("baba");;
+	dfa.accepts("baba");
 	std::cout << "NFA TEST: " << std::endl;
 	NFARulebook nfa_rulebook({
 		FARule(1, 'a', 1), FARule(1, 'b', 1), FARule(1, 'b', 2),

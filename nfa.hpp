@@ -14,8 +14,13 @@ public:
 	std::set<unsigned int> next_states(const std::set<unsigned int> a_states, const char a_litera) {
 		std::set<unsigned int> result;
 		for (unsigned int state : a_states) {
-			unsigned int next_state = rule_for(state, a_litera)->follow();
-			result.insert(next_state);
+			//auto rule = rule_for(state, a_litera);
+//#ifdef _DEBUG
+			//rule->inspect();
+//#endif
+			//unsigned int next_state = rule->follow();
+			//result.insert(next_state);
+			follow_rules_for(state, a_litera, result);
 		}
 
 		return result;
@@ -23,10 +28,22 @@ public:
 
 	const std::vector<FARule>::iterator rule_for(unsigned int a_state, char a_litera) {
 		auto result = std::find_if(m_rules.begin(), m_rules.end(), [&](FARule a_it)->bool{
-			return a_it.applies_to(a_state, a_litera);
+			bool applies = a_it.applies_to(a_state, a_litera);
+			return applies;
 		});
 
 		return result;
+	}
+
+	void follow_rules_for(unsigned int a_state, char a_litera, std::set<unsigned int>& a_result) {
+		for (auto rule : m_rules) {
+			bool is_applies = rule.applies_to(a_state, a_litera);
+			
+			if (is_applies) {
+				unsigned int next_state = rule.follow();
+				a_result.insert(next_state);
+			}
+		}
 	}
 
 private:
