@@ -2,6 +2,30 @@
 #define FARULE_H_
 
 #include<iostream>
+//EXPERIMENTAL
+template<class S, class I>
+class TFARule {
+private:
+	S m_state;
+	S m_next_state;
+	I m_input;
+public:
+	TFARule(S a_state, I a_input, S a_next_state) : 
+		m_state(a_state), m_input(a_input), m_next_state(a_next_state)
+	{}
+
+	bool applies_to(S a_state, I a_input) {
+		return m_state == a_state && m_input == a_input;
+	}
+
+	S state() {
+		return m_state;
+	}
+
+	S follow() {
+		return m_next_state;
+	}
+};
 
 class FARule {
 private:
@@ -19,7 +43,7 @@ public:
 		return m_state == a_state && m_litera == a_litera;
 	}
 
-	const unsigned int state() {
+	unsigned int state() {
 		return m_state;
 	}
 
