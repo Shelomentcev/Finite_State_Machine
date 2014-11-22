@@ -1,9 +1,12 @@
 #ifndef NFA_H_ 
 #define NFA_H_
-
-#include<vector>
 #include<set>
-#include"dfa.hpp"
+#include<vector>
+#include<string>
+#include<iostream>
+#include<algorithm>
+#include<memory>
+#include"FARule.hpp"
 
 class NFARulebook {
 public:

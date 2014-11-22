@@ -1,9 +1,8 @@
 #include <iostream>
-#include "dfa.hpp"
-#include "nfa.hpp"
+#include "DFA.hpp"
+#include "NFA.hpp"
+
 using namespace std;
-
-
 
 int main()
 {
