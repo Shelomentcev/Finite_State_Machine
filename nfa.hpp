@@ -2,7 +2,6 @@
 #include<set>
 #include"dfa.hpp"
 
-// нига правил дл€ недетерменированного конечного автомата
 class NFARulebook {
 public:
 	NFARulebook(std::vector<FARule> a_rules) :
@@ -31,16 +30,55 @@ private:
 	std::vector<FARule> m_rules;
 };
 
-//Ќе детерменированный конечный автомат
 class NFA {
 public:
-	NFA (std::set<unsigned int> a_current_states, std::set<unsigned int> an_accept_states, NFARulebook a_rulebook):
+	NFA(std::set<unsigned int> a_current_states, std::set<unsigned int> an_accept_states, NFARulebook a_rulebook) :
 		m_current_states(a_current_states),
 		m_accept_states(an_accept_states),
 		m_rulebook(a_rulebook)
 	{ }
+
 	bool accepting() {
-		return true;
+
+		std::set<unsigned int>::iterator intersect_start;
+		std::set<unsigned int>::iterator intersect_end = std::set_intersection(m_current_states.begin(), m_current_states.end(),
+			m_accept_states.begin(), m_accept_states.end(), intersect_start);
+
+		return intersect_start != intersect_end;
+	}
+
+	void read_character(const char a_litera) {
+		m_current_states = m_rulebook.next_states(m_current_states, a_litera);
+	}
+
+	void read_string(const std::string a_program){
+		for (char litera : a_program) {
+			read_character(litera);
+		}
+	}
+private:
+	std::set<unsigned int> m_current_states;
+	std::set<unsigned int> m_accept_states;
+	NFARulebook m_rulebook;
+};
+
+class NFADesign{
+public:
+	NFADesign(std::set<unsigned int> a_current_states,
+		std::set<unsigned int> a_accept_states,
+		NFARulebook a_rulebook) :
+		m_current_states(a_current_states), m_accept_states(a_accept_states), m_rulebook(a_rulebook)
+	{ }
+
+	std::unique_ptr<NFA> to_nfa() {
+		std::unique_ptr<NFA> temp(new NFA(m_current_states, m_accept_states, m_rulebook));
+		return temp;
+	}
+
+	bool accepts(std::string a_program) {
+		std::unique_ptr<NFA> temp = to_nfa();
+		temp->read_string(a_program);
+		return temp->accepting();
 	}
 private:
 	std::set<unsigned int> m_current_states;

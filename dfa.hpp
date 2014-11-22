@@ -5,7 +5,6 @@
 #include<algorithm>
 #include<memory>
 
-//Правило
 class FARule {
 private:
 	unsigned int m_state;
@@ -39,7 +38,6 @@ public:
 	}
 };
 
-//Книга правил
 class DFARulebook {
 public:
 	DFARulebook(std::vector<FARule> a_rules) :
@@ -65,7 +63,6 @@ private:
 	}
 };
 
-//Конечный автомат
 class DFA {
 private:
 	unsigned int m_current_state;
@@ -102,7 +99,6 @@ public:
 	}
 };
 
-//Фабрика конечных автоматов
 class DFADesign{
 private:
 	unsigned int m_current_state;
