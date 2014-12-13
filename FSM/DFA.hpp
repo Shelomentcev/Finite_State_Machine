@@ -55,7 +55,14 @@ public:
 
 	bool accepting() {
 		bool isAccepting = m_accept_states.find(m_current_state) != m_accept_states.end();
-
+#ifdef _DEBUG
+		std::cout << "DFA accepting state ";
+		if (isAccepting)
+			std::cout << "true";
+		else
+			std::cout << "false";
+		std::cout << std::endl;
+#endif
 		return isAccepting;
 	}
 };

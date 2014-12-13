@@ -12,11 +12,12 @@ int main()
 		FARule(2, 'a', 2), FARule(2, 'b', 3),
 		FARule(3, 'a', 3), FARule(3, 'b', 3)
 	});
+
 	DFADesign dfa(1, {3}, dfa_rulebook);
 	dfa.accepts("a");
 	dfa.accepts("baa");
 	dfa.accepts("baba");
-	std::cout << "NFA TEST: " << std::endl;
+	std::cout << "\nNFA TEST: " << std::endl;
 	NFARulebook nfa_rulebook({
 		FARule(1, 'a', 1), FARule(1, 'b', 1), FARule(1, 'b', 2),
 		FARule(2, 'a', 3), FARule(2, 'b', 3), 
@@ -24,10 +25,13 @@ int main()
 	});
 
 	NFADesign nfa({ 1 }, {4}, nfa_rulebook);
+	std::cout << "Should: true ";
 	nfa.accepts("bab");
+	std::cout << "Should: true ";
 	nfa.accepts("bbbbb");
+	std::cout << "Should: false ";
 	nfa.accepts("bbabb");
-	std::cout << "Free moves test: " << std::endl;
+	std::cout << "\nFree moves test: " << std::endl;
 	NFARulebook free_moves_rulebook({
 		FARule(1, '\0', 2),
 		FARule(1, '\0', 4),

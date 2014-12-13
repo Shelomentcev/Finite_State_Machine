@@ -120,6 +120,7 @@ public:
 		temp->read_string(a_program);
 		return temp->accepting();
 	}
+
 private:
 	std::set<unsigned int> m_current_states;
 	std::set<unsigned int> m_accept_states;
