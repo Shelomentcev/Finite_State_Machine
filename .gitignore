@@ -8,3 +8,8 @@
 *.vcxproj.filters
 /Debug
 /Release
+*.obj
+*.log
+*.tlog
+*.pdb
+*.idb
