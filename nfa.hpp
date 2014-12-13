@@ -35,8 +35,8 @@ public:
 	
 	std::set<unsigned int> folow_free_moves(std::set<unsigned int> a_states) {
 		std::set<unsigned int> more_states = next_states(a_states, '\0');
-
-		if (std::includes(more_states.begin(), more_states.end(), a_states.begin(), a_states.end()) || more_states.empty()) {
+		bool isInclude = std::includes(a_states.begin(), a_states.end(), more_states.begin(), more_states.end());
+		if (isInclude || more_states.empty()) {
 			more_states = a_states;
 		} else {
 			more_states.insert(a_states.begin(), a_states.end());
