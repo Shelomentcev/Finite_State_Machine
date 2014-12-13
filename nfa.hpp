@@ -17,12 +17,6 @@ public:
 	std::set<unsigned int> next_states(const std::set<unsigned int> a_states, const char a_litera) {
 		std::set<unsigned int> result;
 		for (unsigned int state : a_states) {
-			//auto rule = rule_for(state, a_litera);
-//#ifdef _DEBUG
-			//rule->inspect();
-//#endif
-			//unsigned int next_state = rule->follow();
-			//result.insert(next_state);
 			follow_rules_for(state, a_litera, result);
 		}
 
@@ -30,12 +24,26 @@ public:
 	}
 
 	const std::vector<FARule>::iterator rule_for(unsigned int a_state, char a_litera) {
+		
 		auto result = std::find_if(m_rules.begin(), m_rules.end(), [&](FARule a_it)->bool{
 			bool applies = a_it.applies_to(a_state, a_litera);
 			return applies;
 		});
 
 		return result;
+	}
+	
+	std::set<unsigned int> folow_free_moves(std::set<unsigned int> a_states) {
+		std::set<unsigned int> more_states = next_states(a_states, '\0');
+
+		if (std::includes(more_states.begin(), more_states.end(), a_states.begin(), a_states.end()) || more_states.empty()) {
+			more_states = a_states;
+		} else {
+			more_states.insert(a_states.begin(), a_states.end());
+			more_states = folow_free_moves(more_states);
+		}
+
+		return more_states;
 	}
 
 	void follow_rules_for(unsigned int a_state, char a_litera, std::set<unsigned int>& a_result) {
@@ -62,12 +70,6 @@ public:
 	{ }
 
 	bool accepting() {
-
-		//std::set<unsigned int> intersect_result;
-		//std::set<unsigned int>::iterator it = std::set_intersection(m_current_states.begin(), m_current_states.end(),
-		//	m_accept_states.begin(), m_accept_states.end(), intersect_result.begin());
-		
-		//return !intersect_result.empty();
 		for (auto accept_state : m_accept_states) {
 			for (auto current_state : m_current_states) {
 				if (accept_state == current_state) {
@@ -85,6 +87,7 @@ public:
 	}
 
 	void read_character(const char a_litera) {
+		m_current_states = m_rulebook.folow_free_moves(m_current_states);
 		m_current_states = m_rulebook.next_states(m_current_states, a_litera);
 	}
 

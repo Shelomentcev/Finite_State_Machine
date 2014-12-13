@@ -33,7 +33,7 @@ private:
 	unsigned int m_next_state;
 	char m_litera;
 public:
-	FARule() :FARule(0, 0, 0) {}
+	FARule() :FARule(0, '\0', 0) {}
 	FARule(unsigned int a_state, char a_litera, unsigned int a_next_state) :
 		m_state(a_state),
 		m_litera(a_litera),
